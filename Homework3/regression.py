@@ -6,6 +6,7 @@ import math
 # ******************** REMOVE ********************
 # https://mkang.faculty.unlv.edu/teaching/CS489_689/code3/Linear_Regression.html
 # https://www.youtube.com/watch?v=VmbA0pi2cRQ
+# https://www.youtube.com/watch?v=P8hT5nDai6A
 # ******************** REMOVE ********************
 data = pd.read_csv("auto-mpg.data.csv")
 
@@ -20,11 +21,13 @@ def normalize_Data(data_Column):
     """
     new_Data_List = []
 
+    # Bottom value will remain constent throughout loop
+    bottom = max(data_Column) - min(data_Column)        # x_Max - x_Min
+
     # Traverse each value within data_Column to perform calculation
     for i in range(len(data_Column)):
         # X_norm = (x - x_Min) / (X_Max - X_Min)
         top = data_Column[i] - min(data_Column)         # x - x_Min
-        bottom = max(data_Column) - min(data_Column)    # x_Max - x_Min
         result = top / bottom                   # Top / Bot
         new_Data_List.append(result)
     # For, END
