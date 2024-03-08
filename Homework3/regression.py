@@ -7,6 +7,12 @@ import math
 # https://mkang.faculty.unlv.edu/teaching/CS489_689/code3/Linear_Regression.html
 # https://www.youtube.com/watch?v=VmbA0pi2cRQ
 # https://www.youtube.com/watch?v=P8hT5nDai6A
+# https://www.youtube.com/watch?v=ltXSoduiVwY
+# Multiple linear Regression
+# x1, x2, x3, xn
+# m1, m2, m3, mn
+# Y = m1x1 + m2x2 + m3x3 + mnxn + c
+# c -> y-intercept
 # ******************** REMOVE ********************
 data = pd.read_csv("auto-mpg.data.csv")
 
@@ -49,8 +55,18 @@ def mean_Error(m, b, points):
 # Drop the last row (Car Name)
 data = data.iloc[:, :-1]
 
+build_DF = pd.DataFrame()
+
+# Normalize data and rebuild back into dataFrame
 for i in range(len(data.columns)):
-    #pd.DataFrame(normalize_Data(data.iloc[:, i]))          # To change to DataFrame...
-    print(pd.DataFrame(normalize_Data(data.iloc[:, i])))    # Leave as list for now
+    # To change to DataFrame...
+    temp_DF = pd.DataFrame(normalize_Data(data.iloc[:, i]))
+    # Get name of each column
+    columnName = "STD_" + data.columns[i]
+
+    # Rebuild the data back into a DataFrame
+    build_DF.insert(i, columnName, temp_DF, True)
 # For, END
 
+print(np.corrcoef(build_DF))
+print(build_DF)
