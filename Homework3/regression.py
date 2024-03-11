@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import math
 
 # ******************** REMOVE ********************
 # https://mkang.faculty.unlv.edu/teaching/CS489_689/code3/Linear_Regression.html
@@ -17,6 +16,10 @@ import math
 # ******************** REMOVE ********************
 data = pd.read_csv("auto-mpg.data.csv")
 
+# Storing the global min and max of the mpg for later
+mpg_Max = 0
+mpg_Min = 0
+
 # Function will be utilizeing the Min-Max Scaling
 def normalize_Data(data_Column):
     """
@@ -27,6 +30,14 @@ def normalize_Data(data_Column):
     :return: Output the normalized column in dataType List
     """
     new_Data_List = []
+    # Will be updating the global value so def here
+    global mpg_Max
+    global mpg_Min
+
+    # Quick check to find the min and max from mpg
+    if (data_Column.name == "mpg"):
+        mpg_Max = max(data_Column)
+        mpg_Min = min(data_Column)
 
     # Bottom value will remain constent throughout loop
     bottom = max(data_Column) - min(data_Column)        # x_Max - x_Min
@@ -41,24 +52,20 @@ def normalize_Data(data_Column):
     return new_Data_List
 # Normalize_Data funct, END
 
-def un_normalize_Data(data_Column, max, min):
+def un_normalize_Data(data, max, min):
     """
     Given that we know what the specific data's min and max is, 
     we can get it's original value by the following formula:
     X: is norm-val
     Un-normalized val = X * (max - min) + min
 
-    :param data_Column: Normalized data
+    :param data: Normalized data point
     :param max: Original Max value of data
     :param min: Original Min value of data
     :return: un-normalized data row
     """
-    unNorm_Data_List = []
 
-    for i in range(len(data_Column)):
-        print(data_Column[i])
-
-    return unNorm_Data_List
+    return data * (max - min) + min
 
 # *************** CHANGE THE CODE DOWN HERE ***************
 def linear_Model(x_val, y_target, learning_rate, iteration, arr):
@@ -83,7 +90,8 @@ def linear_Model(x_val, y_target, learning_rate, iteration, arr):
         theta = theta - learning_rate * d_theta
         # print(theta)
 
-        arr.append(cost)
+        # Un-Norm data and store into array
+        arr.append(un_normalize_Data(cost, mpg_Max, mpg_Min))
 
     return theta
 
@@ -99,8 +107,8 @@ def mean_Error(m, b, points):
 
 # ******************** Main ********************
 
-lr_lambda = 1               # Learning Rage
-max_Iteration = 10000       # Iterations
+lr_lambda = 0.5               # Learning Rate
+max_Iteration = 10000         # Iterations
 
 # Drop the last row (Car Name)
 data = data.iloc[:, :-1]
@@ -130,13 +138,9 @@ y = build_DF.iloc[ : , 0 : 1]
 cost_arr = []
 
 theta = linear_Model(x, y, lr_lambda, max_Iteration, cost_arr)
-un_normalize_Data(cost_arr, 32, 18)
-#print(cost_arr)
+print(cost_arr)
 
 rng = np.arange(0, max_Iteration)
 plt.plot(rng, cost_arr)
 plt.show()
 
-
-# print(np.corrcoef(build_DF))
-# print(build_DF)
