@@ -1,7 +1,6 @@
 import pandas as pd
 pd.options.mode.chained_assignment = None       # Silence warning
 import numpy as np
-import matplotlib.pyplot as plt
 import random as rand   # Random number
 import math             # Using round function
 
