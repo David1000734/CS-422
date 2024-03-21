@@ -200,6 +200,9 @@ def k_fold_Test(arr, folds):
     margin_error = 3                  # If value lands within #, count as valid
     highest_accur = 0
 
+    # Randomize the dataFrame
+    arr = arr.sample(frac=1).reset_index(drop=True)
+
     if (folds < 2 or folds > 100):
         print("Error: K-Folds must be higher than 2 and less than 100.")
         return
@@ -287,8 +290,7 @@ def k_fold_Test(arr, folds):
                 max_coef = coef
                 max_fold = (fold_I + 1)
                 highest_accur = correct_count / len(test_arr)
-                print(highest_accur)
-                print(max_fold)
+
         # For, END
         # Root Mean Square Error
         # Sqrt(sum from 1 to N(actual - predict)^2))
