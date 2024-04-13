@@ -68,6 +68,9 @@ epochs = 100            # Train Model, 100 iterations
 kf = KFold(n_splits = 5, shuffle = True)
 
 idx = 1         # incrementor
+
+sum = 0         # Keep track of average...
+
 # Create splits for k_fold
 print("\t\t Starting K-Fold test.")
 for train_idx, test_idx in kf.split(x_values):
@@ -142,14 +145,12 @@ for train_idx, test_idx in kf.split(x_values):
         # For, END
     # With, END
 
-    # Print Results
-    print("Fold %i: %i correct with %0.2f%% accuracy." % \
-        (idx, correct, (correct / y_size) * 100))
+    sum += (correct / y_size) * 100
 
-    # New line printer
-    if (idx < 5):
-        # print itself gives a newLine so...
-        print('')
+    # Print Results
+    print("Fold %i: %i correct with %0.2f%% accuracy.\n" % \
+        (idx, correct, (correct / y_size) * 100))
 
     idx += 1            # Counter
 # for KFold, END
+print("Average accuracy of the Neural Network: %0.2f." % (sum / 5))
